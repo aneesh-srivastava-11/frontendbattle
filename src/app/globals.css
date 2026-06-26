@@ -1,0 +1,235 @@
+@import "tailwindcss";
+
+/* ============================================
+   DESIGN SYSTEM TOKENS
+   From colorPallet.pdf and fonts.pdf
+   ============================================ */
+
+:root {
+  /* Color palette — exact values from colorPallet.pdf */
+  --bg-dark: #172B36;           /* Oceanic Noir — primary dark surface */
+  --bg-dark-elevated: #114C5A;  /* Nocturnal Expedition — elevated/card on dark */
+  --bg-light: #F1F6F4;          /* Arctic Powder — primary light surface */
+  --bg-light-elevated: #D9E8E2; /* Mystic Mint — secondary light surface */
+  --accent: #FFC801;            /* Forsythia — primary accent, CTAs */
+  --accent-secondary: #FF9932;  /* Deep Saffron — secondary accent, gradients */
+}
+
+/* Tailwind v4 theme extension */
+@theme inline {
+  --color-bg-dark: var(--bg-dark);
+  --color-bg-dark-elevated: var(--bg-dark-elevated);
+  --color-bg-light: var(--bg-light);
+  --color-bg-light-elevated: var(--bg-light-elevated);
+  --color-accent: var(--accent);
+  --color-accent-secondary: var(--accent-secondary);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-dark);
+  color: var(--bg-light);
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   ANIMATION KEYFRAMES & PROPERTIES
+   ============================================ */
+
+@property --mouse-x {
+  syntax: '<length>';
+  initial-value: -999px;
+  inherits: false;
+}
+@property --mouse-y {
+  syntax: '<length>';
+  initial-value: -999px;
+  inherits: false;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 200, 1, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 200, 1, 0.3);
+  }
+}
+
+@keyframes glow-drift {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(40px, -60px) scale(1.08);
+  }
+  66% {
+    transform: translate(-30px, 30px) scale(0.92);
+  }
+}
+
+@keyframes btn-shadow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 200, 1, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(255, 200, 1, 0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Staggered entry animation utility classes */
+.animate-fade-in-up {
+  animation: fade-in-up 500ms ease-out both;
+}
+
+.animate-hero-entrance {
+  animation: hero-fade-in-up 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-glow-drift {
+  animation: glow-drift 22s ease-in-out infinite;
+}
+
+.animate-btn-pulse {
+  animation: btn-shadow-pulse 2.5s infinite ease-in-out;
+}
+
+/* Precise hero timing classes */
+.animate-delay-0 { animation-delay: 0ms; }
+.animate-delay-60 { animation-delay: 60ms; }
+.animate-delay-120 { animation-delay: 120ms; }
+.animate-delay-180 { animation-delay: 180ms; }
+.animate-delay-240 { animation-delay: 240ms; }
+.animate-delay-300 { animation-delay: 300ms; }
+
+/* Scroll-reveal framework */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 500ms ease-out, transform 500ms ease-out;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-container {
+  opacity: 1;
+}
+
+.reveal-child {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 400ms cubic-bezier(0.16, 1, 0.3, 1), transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.in-view .reveal-child {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delays for reveal children */
+.reveal-stagger-1 { transition-delay: 0ms; }
+.reveal-stagger-2 { transition-delay: 100ms; }
+.reveal-stagger-3 { transition-delay: 200ms; }
+.reveal-stagger-4 { transition-delay: 300ms; }
+
+/* ============================================
+   PREFERS-REDUCED-MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  /* Disable large/decorative page-load animations */
+  .animate-fade-in-up {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  
+  .reveal-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* Keep essential interactive feedback but at a reduced, non-zero duration */
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+  
+  /* Reduce transition durations for interactive elements instead of killing them entirely */
+  .transition-all,
+  .transition-colors,
+  .transition-opacity,
+  .transition-transform,
+  .transition,
+  [class*="transition-"] {
+    transition-duration: 75ms !important;
+  }
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR (dark theme)
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-dark-elevated);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
