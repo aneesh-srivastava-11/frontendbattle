@@ -13,6 +13,8 @@
   --bg-light-elevated: #D9E8E2; /* Mystic Mint — secondary light surface */
   --accent: #FFC801;            /* Forsythia — primary accent, CTAs */
   --accent-secondary: #FF9932;  /* Deep Saffron — secondary accent, gradients */
+  --font-inter: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-jetbrains-mono: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 
 /* Tailwind v4 theme extension */
@@ -119,6 +121,15 @@ body {
   }
 }
 
+@keyframes footer-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 /* Staggered entry animation utility classes */
 .animate-fade-in-up {
   animation: fade-in-up 500ms ease-out both;
@@ -169,6 +180,186 @@ body {
 .in-view .reveal-child {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Reference-inspired bento visuals, built from CSS and inline SVG only. */
+.bento-orb {
+  position: absolute;
+  top: 14px;
+  left: 20px;
+  width: 112px;
+  height: 112px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 34% 34%, color-mix(in srgb, var(--accent) 88%, white 12%), transparent 58%),
+    radial-gradient(circle at 68% 72%, var(--accent-secondary), transparent 64%);
+  filter: blur(28px);
+  opacity: 0.24;
+  transform: scale(0.82) translate3d(-8px, 4px, 0);
+  transition: opacity 180ms ease-out, transform 180ms ease-out, filter 180ms ease-out;
+  pointer-events: none;
+}
+
+.group:hover .bento-orb,
+.group:focus .bento-orb {
+  opacity: 0.54;
+  filter: blur(24px);
+  transform: scale(1.18) translate3d(10px, -8px, 0);
+}
+
+.mobile-orb-icon {
+  position: relative;
+  overflow: hidden;
+}
+
+.mobile-orb-icon::before {
+  content: "";
+  position: absolute;
+  inset: -18px;
+  background: radial-gradient(circle, var(--accent) 0%, var(--accent-secondary) 46%, transparent 70%);
+  filter: blur(16px);
+  opacity: 0.2;
+}
+
+.mobile-orb-icon > svg {
+  position: relative;
+  z-index: 1;
+}
+
+.feature-flow,
+.dashboard-mock {
+  position: relative;
+  z-index: 1;
+  border-radius: 14px;
+  border: 1px solid rgb(241 246 244 / 0.08);
+  background: rgb(23 43 54 / 0.36);
+  box-shadow: inset 0 1px 0 rgb(241 246 244 / 0.08);
+}
+
+.feature-flow {
+  padding: 10px 12px;
+}
+
+.flow-line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 260;
+  stroke-dashoffset: 260;
+  opacity: 0.7;
+  transition: stroke-dashoffset 900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.flow-line-2 {
+  stroke: var(--accent-secondary);
+  transition-delay: 120ms;
+}
+
+.flow-line-3 {
+  stroke: rgb(217 232 226 / 0.7);
+  transition-delay: 220ms;
+}
+
+.in-view .flow-line {
+  stroke-dashoffset: 0;
+}
+
+.flow-node circle {
+  fill: rgb(23 43 54 / 0.88);
+  stroke: rgb(241 246 244 / 0.22);
+  stroke-width: 1;
+}
+
+.flow-node text {
+  fill: var(--bg-light);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+.dashboard-mock {
+  display: grid;
+  grid-template-columns: 112px 1fr;
+  align-items: center;
+  gap: 16px;
+  min-height: 132px;
+  padding: 16px;
+}
+
+.gauge-wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.gauge-track,
+.gauge-value {
+  fill: none;
+  stroke-width: 8;
+}
+
+.gauge-track {
+  stroke: rgb(241 246 244 / 0.1);
+}
+
+.gauge-value {
+  stroke: var(--accent);
+  stroke-linecap: round;
+  stroke-dasharray: 201;
+  stroke-dashoffset: 201;
+  transition: stroke-dashoffset 950ms cubic-bezier(0.16, 1, 0.3, 1) 120ms;
+}
+
+.in-view .gauge-value {
+  stroke-dashoffset: 36;
+}
+
+.gauge-label {
+  position: absolute;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--bg-light);
+}
+
+.bar-stack {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(16px, 1fr));
+  align-items: end;
+  gap: 10px;
+  height: 92px;
+}
+
+.metric-bar {
+  display: block;
+  height: 0;
+  min-height: 8px;
+  border-radius: 999px 999px 4px 4px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-secondary));
+  box-shadow: 0 8px 22px rgb(255 200 1 / 0.14);
+  transition: height 700ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.in-view .metric-bar {
+  height: var(--bar-height);
+}
+
+.footer-marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.footer-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: footer-marquee 24s linear infinite;
+}
+
+.footer-marquee-text {
+  padding-right: 0.22em;
+  white-space: nowrap;
 }
 
 /* Stagger delays for reveal children */

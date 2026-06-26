@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback, type SVGProps } from 'react';
+import { useState, useEffect, useRef, useCallback, type CSSProperties, type SVGProps } from 'react';
 import {
   Cog8Tooth,
   Cube16Solid,
@@ -12,14 +12,12 @@ import {
 } from '@/components/icons';
 import { ScrollReveal } from '@/components/layout/ScrollReveal';
 
-/* =============================================
-   Feature Data
-   ============================================= */
-
 interface FeatureItem {
   icon: React.ComponentType<SVGProps<SVGSVGElement>>;
   title: string;
   description: string;
+  accent: string;
+  accentSecondary: string;
 }
 
 const FEATURES: FeatureItem[] = [
@@ -27,65 +25,115 @@ const FEATURES: FeatureItem[] = [
     icon: Cog8Tooth,
     title: 'Automated Workflows',
     description:
-      'Configure complex data pipelines with zero-code automation rules. Set triggers, conditions, and actions that execute autonomously — from ETL processes to real-time event handling.',
+      'Configure complex data pipelines with zero-code automation rules. Set triggers, conditions, and actions that execute autonomously from ETL processes to real-time event handling.',
+    accent: '#FFC801',
+    accentSecondary: '#FF9932',
   },
   {
     icon: Cube16Solid,
     title: 'Modular Primitives',
     description:
       'Build with composable, reusable pipeline building blocks. Each primitive is self-contained, version-controlled, and designed to snap together like engineering-grade LEGO.',
+    accent: '#D9E8E2',
+    accentSecondary: '#FFC801',
   },
   {
     icon: LinkSolid,
     title: 'Seamless Integrations',
     description:
-      'Connect 500+ data sources with pre-built connectors. From legacy databases to modern SaaS APIs — authenticate once and let NexusFlow handle the rest.',
+      'Connect 500+ data sources with pre-built connectors. From legacy databases to modern SaaS APIs, authenticate once and let NexusFlow handle the rest.',
+    accent: '#FF9932',
+    accentSecondary: '#FFC801',
   },
   {
     icon: Search,
     title: 'Smart Query Engine',
     description:
       'AI-powered search across all your connected datasets. Ask questions in natural language and get structured results, complete with lineage tracking and confidence scores.',
+    accent: '#FFC801',
+    accentSecondary: '#D9E8E2',
   },
   {
     icon: ArrowPath,
     title: 'Continuous Sync',
     description:
       'Real-time data synchronization with automatic conflict resolution. Bi-directional sync keeps every system as the single source of truth, with sub-second propagation.',
+    accent: '#D9E8E2',
+    accentSecondary: '#FF9932',
   },
   {
     icon: ArrowTrendingUp,
     title: 'Performance Analytics',
     description:
-      'Monitor pipeline health with real-time metrics dashboards. Track throughput, latency, error rates, and cost per record — then let AI suggest optimizations.',
+      'Monitor pipeline health with real-time metrics dashboards. Track throughput, latency, error rates, and cost per record, then let AI suggest optimizations.',
+    accent: '#FF9932',
+    accentSecondary: '#D9E8E2',
   },
 ];
 
-/* =============================================
-   BentoAccordion Component
-   ============================================= */
+function FeatureMiniVisual({ index }: { index: number }) {
+  if (index === 0) {
+    return (
+      <div className="feature-flow mt-7" aria-hidden="true">
+        <svg viewBox="0 0 420 150" className="h-32 w-full overflow-visible">
+          <path className="flow-line flow-line-1" d="M40 76 C110 20 165 20 210 74" />
+          <path className="flow-line flow-line-2" d="M210 74 C260 128 324 126 382 58" />
+          <path className="flow-line flow-line-3" d="M92 118 C152 96 236 98 300 34" />
+          {[
+            [40, 76, 'TR'],
+            [210, 74, 'ETL'],
+            [382, 58, 'AI'],
+            [92, 118, 'DB'],
+            [300, 34, 'OK'],
+          ].map(([cx, cy, label]) => (
+            <g key={label as string} className="flow-node">
+              <circle cx={cx} cy={cy} r="18" />
+              <text x={cx} y={Number(cy) + 4}>
+                {label}
+              </text>
+            </g>
+          ))}
+        </svg>
+      </div>
+    );
+  }
 
-/**
- * Feature 2 — Bento-to-Accordion with Context Lock
- *
- * Desktop (≥768px): CSS Grid Bento layout, hover/focus interactive
- * Mobile (<768px): Touch-optimized accordion with chevron rotation
- *
- * State is LOCAL ONLY — never lifted to the page.
- *
- * Context Lock: if the user is hovering/focused on a bento node and resizes
- * past the mobile breakpoint, that exact index transfers to the accordion
- * and opens smoothly. Uses matchMedia listener + continuous mouseenter/focus tracking.
- */
+  if (index === 5) {
+    return (
+      <div className="dashboard-mock mt-7" aria-hidden="true">
+        <div className="gauge-wrap">
+          <svg viewBox="0 0 88 88" className="h-24 w-24 -rotate-90">
+            <circle className="gauge-track" cx="44" cy="44" r="32" />
+            <circle className="gauge-value" cx="44" cy="44" r="32" />
+          </svg>
+          <span className="gauge-label">82%</span>
+        </div>
+        <div className="bar-stack">
+          {[64, 88, 46, 72].map((height, barIndex) => (
+            <span
+              key={height}
+              className="metric-bar"
+              style={{
+                '--bar-height': `${height}%`,
+                transitionDelay: `${160 + barIndex * 80}ms`,
+              } as CSSProperties}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+}
+
 export function BentoAccordion() {
-  // Local state only — never lifted
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const hoveredIndexRef = useRef<number | null>(null);
   const isMobileRef = useRef(false);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Continuous hover/focus tracking via event listeners
   const handleMouseEnter = useCallback((index: number) => {
     hoveredIndexRef.current = index;
   }, []);
@@ -106,7 +154,6 @@ export function BentoAccordion() {
     }
   }, []);
 
-  // matchMedia listener for context lock
   useEffect(() => {
     const mql = window.matchMedia('(max-width: 767px)');
 
@@ -115,33 +162,23 @@ export function BentoAccordion() {
       isMobileRef.current = e.matches;
       setIsMobile(e.matches);
 
-      // Desktop → Mobile: transfer hovered/focused index to accordion
-      if (!wasMobile && e.matches) {
-        if (hoveredIndexRef.current !== null) {
-          setActiveIndex(hoveredIndexRef.current);
-        }
+      if (!wasMobile && e.matches && hoveredIndexRef.current !== null) {
+        setActiveIndex(hoveredIndexRef.current);
       }
-      // Mobile → Desktop: activeIndex persists as visual highlight naturally
     };
 
-    // Initial check (use the MediaQueryList itself, which has .matches)
     handleBreakpoint(mql);
     mql.addEventListener('change', handleBreakpoint);
     return () => mql.removeEventListener('change', handleBreakpoint);
   }, []);
 
-  // Accordion toggle handler
-  const toggleAccordion = useCallback(
-    (index: number) => {
-      setActiveIndex((prev) => (prev === index ? null : index));
-    },
-    []
-  );
+  const toggleAccordion = useCallback((index: number) => {
+    setActiveIndex((prev) => (prev === index ? null : index));
+  }, []);
 
   return (
     <section id="features" className="py-24 md:py-32 bg-bg-dark">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        {/* Section header */}
         <div className="text-center mb-16">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent mb-4">
             <span className="text-accent-secondary mr-2" aria-hidden="true">{"///"}</span>
@@ -152,13 +189,12 @@ export function BentoAccordion() {
             <span className="text-accent">Data Products</span>
           </h2>
           <p className="font-sans text-base sm:text-lg text-bg-light-elevated max-w-2xl mx-auto">
-            Six core capabilities that cover the entire data lifecycle — from
+            Six core capabilities that cover the entire data lifecycle, from
             ingestion through transformation to actionable insight delivery.
           </p>
         </div>
 
         <ScrollReveal className="reveal-container">
-          {/* Bento Grid (desktop) */}
           {!isMobile && (
             <div
               className="hidden md:grid gap-4"
@@ -176,7 +212,7 @@ export function BentoAccordion() {
                 const Icon = feature.icon;
                 return (
                   <div
-                    key={index}
+                    key={feature.title}
                     ref={(el) => { cardsRef.current[index] = el; }}
                     onMouseEnter={() => handleMouseEnter(index)}
                     onMouseLeave={() => handleMouseLeave(index)}
@@ -197,9 +233,11 @@ export function BentoAccordion() {
                     style={{
                       gridArea: `card${index}`,
                       transitionDelay: `${index * 70}ms`,
-                    }}
+                      '--accent': feature.accent,
+                      '--accent-secondary': feature.accentSecondary,
+                    } as CSSProperties}
                   >
-                    {/* Hover gradient glow overlay */}
+                    <div className="bento-orb" aria-hidden="true" />
                     <div
                       className="absolute inset-0 opacity-0 group-hover:opacity-100 group-focus:opacity-100
                                  transition-opacity duration-150 ease-out pointer-events-none rounded-2xl"
@@ -210,26 +248,23 @@ export function BentoAccordion() {
                       aria-hidden="true"
                     />
 
-                    {/* Icon */}
-                    <div className="relative mb-4 inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent/10 text-accent
-                                    group-hover:bg-accent/20 transition-colors duration-150 ease-out">
+                    <div className="relative mb-4 inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent/10 text-accent group-hover:bg-accent/20 transition-colors duration-150 ease-out">
                       <Icon className="w-6 h-6" aria-hidden="true" />
                     </div>
 
-                    {/* Content */}
                     <h3 className="relative font-mono text-lg font-bold text-bg-light mb-2">
                       {feature.title}
                     </h3>
                     <p className="relative font-sans text-sm text-bg-light-elevated leading-relaxed">
                       {feature.description}
                     </p>
+                    <FeatureMiniVisual index={index} />
                   </div>
                 );
               })}
             </div>
           )}
 
-          {/* Accordion (mobile) */}
           <div className={`${isMobile ? 'block' : 'md:hidden'} space-y-3`}>
             {FEATURES.map((feature, index) => {
               const Icon = feature.icon;
@@ -237,20 +272,21 @@ export function BentoAccordion() {
 
               return (
                 <div
-                  key={index}
+                  key={feature.title}
                   className="reveal-child rounded-xl bg-bg-dark-elevated border border-bg-light/5 overflow-hidden"
-                  style={{ transitionDelay: `${index * 60}ms` }}
+                  style={{
+                    transitionDelay: `${index * 60}ms`,
+                    '--accent': feature.accent,
+                    '--accent-secondary': feature.accentSecondary,
+                  } as CSSProperties}
                 >
-                  {/* Accordion header */}
                   <button
                     onClick={() => toggleAccordion(index)}
-                    className="flex items-center gap-4 w-full px-6 py-5 text-left
-                               hover:bg-accent/5 transition-colors duration-150 ease-out
-                               focus:outline-none focus:bg-accent/5"
+                    className="flex items-center gap-4 w-full px-6 py-5 text-left hover:bg-accent/5 transition-colors duration-150 ease-out focus:outline-none focus:bg-accent/5"
                     aria-expanded={isOpen}
                     aria-controls={`accordion-panel-${index}`}
                   >
-                    <div className={`flex items-center justify-center w-10 h-10 rounded-lg shrink-0
+                    <div className={`mobile-orb-icon flex items-center justify-center w-10 h-10 rounded-lg shrink-0
                                      ${isOpen ? 'bg-accent/20 text-accent' : 'bg-bg-light/5 text-bg-light-elevated'}
                                      transition-colors duration-150 ease-out`}>
                       <Icon className="w-5 h-5" aria-hidden="true" />
@@ -260,16 +296,12 @@ export function BentoAccordion() {
                       {feature.title}
                     </span>
 
-                    {/* Chevron with rotation */}
                     <ChevronDown
-                      className={`w-5 h-5 text-bg-light-elevated shrink-0
-                                 transition-transform duration-150 ease-out
-                                 ${isOpen ? 'rotate-180' : 'rotate-0'}`}
+                      className={`w-5 h-5 text-bg-light-elevated shrink-0 transition-transform duration-150 ease-out ${isOpen ? 'rotate-180' : 'rotate-0'}`}
                       aria-hidden="true"
                     />
                   </button>
 
-                  {/* Accordion panel with animated height */}
                   <div
                     id={`accordion-panel-${index}`}
                     role="region"

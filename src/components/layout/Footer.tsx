@@ -85,14 +85,14 @@ export function Footer() {
 
       {/* Bottom bar with watermark */}
       <div className="border-t border-bg-light/5">
-        {/* Large watermark text */}
-        <div className="mx-auto max-w-7xl px-6 lg:px-8 pt-8 pb-2 overflow-hidden">
-          <span
-            className="block font-mono text-6xl sm:text-8xl lg:text-9xl font-black tracking-tighter text-bg-light/[0.03] select-none whitespace-nowrap"
-            aria-hidden="true"
-          >
-            NEXUSFLOW
-          </span>
+        {/* Large marquee wordmark */}
+        <div className="footer-marquee pt-8 pb-2" aria-hidden="true">
+          <div className="footer-marquee-track font-mono text-6xl sm:text-8xl lg:text-9xl font-black tracking-tight text-bg-light/[0.035] select-none">
+            <span className="footer-marquee-text">NEXUSFLOW / BUILD LOGIC AT SCALE / </span>
+            <span className="footer-marquee-text">NEXUSFLOW / BUILD LOGIC AT SCALE / </span>
+            <span className="footer-marquee-text">NEXUSFLOW / BUILD LOGIC AT SCALE / </span>
+            <span className="footer-marquee-text">NEXUSFLOW / BUILD LOGIC AT SCALE / </span>
+          </div>
         </div>
         <div className="mx-auto max-w-7xl px-6 lg:px-8 pb-8">
           <p className="font-sans text-xs text-bg-light-elevated/60 text-center">
