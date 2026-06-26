@@ -42,7 +42,7 @@ export function Hero() {
         <div
           className="absolute inset-0 opacity-40 transition-opacity duration-300 cursor-glow"
           style={{
-            background: `radial-gradient(800px circle at var(--mouse-x, -999px) var(--mouse-y, -999px), rgba(255, 200, 1, 0.08), transparent 80%)`,
+            background: `radial-gradient(800px circle at var(--mouse-x, -999px) var(--mouse-y, -999px), color-mix(in srgb, var(--accent) 8%, transparent), transparent 80%)`,
           }}
         />
         {/* Grid pattern overlay */}

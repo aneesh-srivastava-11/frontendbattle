@@ -33,7 +33,7 @@ export function PricingCard({
         ${
           isHighlighted
             ? 'bg-bg-dark text-bg-light border-2 border-accent shadow-xl shadow-accent/10 scale-[1.02] md:scale-105'
-            : 'bg-white text-bg-dark border border-bg-dark/10 hover:-translate-y-1 hover:shadow-lg'
+            : 'bg-bg-light text-bg-dark border border-bg-dark/10 hover:-translate-y-1 hover:shadow-lg'
         }`}
     >
       {/* Badge */}

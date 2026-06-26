@@ -132,7 +132,6 @@ export function BentoAccordion() {
   const [isMobile, setIsMobile] = useState(false);
   const hoveredIndexRef = useRef<number | null>(null);
   const isMobileRef = useRef(false);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   const handleMouseEnter = useCallback((index: number) => {
     hoveredIndexRef.current = index;
@@ -213,7 +212,6 @@ export function BentoAccordion() {
                 return (
                   <div
                     key={feature.title}
-                    ref={(el) => { cardsRef.current[index] = el; }}
                     onMouseEnter={() => handleMouseEnter(index)}
                     onMouseLeave={() => handleMouseLeave(index)}
                     onFocus={() => handleFocus(index)}
@@ -221,7 +219,7 @@ export function BentoAccordion() {
                     tabIndex={0}
                     role="article"
                     aria-label={feature.title}
-                    className={`reveal-child group relative rounded-2xl p-8 overflow-hidden
+                    className={`bento-card reveal-child group relative rounded-2xl p-8 overflow-hidden
                                border transition-all duration-150 ease-out
                                focus:outline-none focus:ring-2 focus:ring-accent/30 focus:ring-offset-2 focus:ring-offset-bg-dark
                                cursor-pointer
@@ -243,7 +241,7 @@ export function BentoAccordion() {
                                  transition-opacity duration-150 ease-out pointer-events-none rounded-2xl"
                       style={{
                         background:
-                          'linear-gradient(135deg, rgba(255,200,1,0.06) 0%, rgba(255,153,50,0.06) 100%)',
+                          'linear-gradient(135deg, color-mix(in srgb, var(--accent) 6%, transparent) 0%, color-mix(in srgb, var(--accent-secondary) 6%, transparent) 100%)',
                       }}
                       aria-hidden="true"
                     />

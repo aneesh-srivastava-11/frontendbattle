@@ -113,7 +113,7 @@ export function PricingSwitcher() {
       <select
         ref={selectRef}
         defaultValue="USD"
-        className="rounded-lg bg-white border border-bg-dark/20 px-3 py-2 font-sans text-sm text-bg-dark
+        className="rounded-lg bg-bg-light border border-bg-dark/20 px-3 py-2 font-sans text-sm text-bg-dark
                    focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20
                    transition-colors duration-150 ease-out cursor-pointer"
         aria-label="Select currency"

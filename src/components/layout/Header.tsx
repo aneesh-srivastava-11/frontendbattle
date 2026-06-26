@@ -37,7 +37,7 @@ export function Header() {
       ref={headerRef}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ease-out ${
         scrolled
-          ? 'bg-bg-dark/95 backdrop-blur-md shadow-lg shadow-black/20'
+          ? 'bg-bg-dark/95 backdrop-blur-md shadow-lg shadow-bg-dark/20'
           : 'bg-transparent'
       }`}
     >
@@ -86,7 +86,7 @@ export function Header() {
       {/* Mobile slide-in panel */}
       {/* Overlay */}
       <div
-        className={`fixed inset-0 bg-black/60 z-40 transition-opacity duration-200 ease-out md:hidden ${
+        className={`fixed inset-0 bg-bg-dark/60 z-40 transition-opacity duration-200 ease-out md:hidden ${
           mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
         onClick={() => setMobileOpen(false)}
